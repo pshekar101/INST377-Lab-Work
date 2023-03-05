@@ -156,6 +156,7 @@ form {
   background-color: rgba(34, 51, 59, 0.8);
   font-size: 1.2rem;
   font-weight: 600;
+  flex-shrink:0;
 }
 
 .footer a {
