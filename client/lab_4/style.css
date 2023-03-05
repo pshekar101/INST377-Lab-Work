@@ -299,7 +299,7 @@ form label {
     /* Rules in here will only apply when a screen is the correct size */
     /* check it out by using your developer tools to shrink your screen-size */
     .container {
-      background-color: rgba(102, 136, 188, 0.647);
+      background-color: rgba(115, 151, 206, 0.647);
       flex-direction: column;
       justify-content: center;
       align-content: center;
