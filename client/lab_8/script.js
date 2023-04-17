@@ -31,6 +31,31 @@ function getRandomInt(min, max) {
       return list[index];
     }));
   }
+
+  function initMap(){
+    const carto=L.map('map').setView([38.9,-76.93],13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(carto);
+    return carto;
+
+  }
+  function markerPlace(array, map){
+    console.log('array for markers', array);
+
+    map.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          layer.remove();
+        }
+      });
+
+    array.forEach((item)=>{
+        console.log('markerPlace', item);
+        const{coordinate}= item.geocoded_column_1;
+        L.marker(coordinate[1],coordinate[0]).addTo(map);
+    })
+  }
   
   async function mainEvent() {
     // the async keyword means we can make API requests
@@ -44,9 +69,11 @@ function getRandomInt(min, max) {
     const loadAnimation = document.querySelector("#data_load_animation");
     loadAnimation.style.display = "none";
     generateListButton.classList.add("hidden");
+
+    const carto= initMap();
   
     const storedData=localStorage.getItem('storedData');
-    const parsedData=JSON.parse(storedData);
+    let parsedData=JSON.parse(storedData);
     if(parsedData.length>0){
       generateListButton.classList.remove("hidden");
     }
@@ -64,7 +91,10 @@ function getRandomInt(min, max) {
       );
       const storedList = await results.json();
       localStorage.setItem('storedData',JSON.stringify{storedList})
-     
+      parsedData=storedList;
+      if(parsedData.length>0){
+        generateListButton.classList.remove("hidden");
+      }
   
       loadAnimation.style.display = "none";
       //console.table(storedList);
@@ -80,6 +110,7 @@ function getRandomInt(min, max) {
       loadAnimation.style.display = "none";
       console.log(currentList);
       injectHTML(currentList);
+      markerPlace(currentList, carto);
     });
   
     textField.addEventListener("input", (event) => {
@@ -87,7 +118,14 @@ function getRandomInt(min, max) {
       const newList = filterList(currentList, event.target.value);
       console.log(newList);
       injectHTML(newList);
+      markerPlace(newList, carto);
     });
+
+    clearDataButton.addEventListener("click",(event)=>{
+        console.log('clear browser data');
+        localStorage.clear
+        console.log('localStorage Check', localStorage.getItem("storedData"))
+    } )
   }
   
   /*
