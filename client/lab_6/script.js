@@ -28,17 +28,17 @@ function filterList(list, query) {
 function cutRestaurantList(list){
   console.log('fired cut list');
   const range=[...Array(15).keys()];
-  return newArray= range.map((item)=>{
+  return (newArray= range.map((item)=>{
     const index= getRandomInt(0, list.length -1);
     return list[index]
-  })
+  }));
 }
 
 
 
 async function mainEvent() { // the async keyword means we can make API requests
   const mainForm = document.querySelector('.main_form'); // This class name needs to be set on your form before you can listen for an event on it
-  const filterButton=document.querySelector('#filter');
+  const filterButton=document.querySelector('#filter_button');
   const loadDataButton= document.querySelector('#data_load');
   const generateListButton= document.querySelector('#generate');
   // Add a querySelector that targets your filter button here
@@ -54,25 +54,24 @@ async function mainEvent() { // the async keyword means we can make API requests
 
     const results = await fetch('https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json');
     currentList=await results.json();
-    loadAnimation.style.display='none';
-    console.table(currentList)
-
+    loadAnimation.style.display='none'
+    console.table(currentList);
+    
   
+    });
+  
+    filterButton.addEventListener('click', (event)=>{
+      console.log('clicked FilterButton');
+  
+      const formData= new FormData(mainForm);
+      const formProps=Object.fromEntries(formData);
+  
+      console.log(formProps);
+      const newList=filterList(currentList, formProps.resto)
+  
+      console.log(newList);
+      injectHTML(newList);
     })
-  
-  filterButton.addEventListener('click',(event)=>{
-    console.log('clicked FilterButton');
-    loadAnimation.style.display='inline-block';
-
-    const formData=  new FormData(mainForm);
-    const formProps=Object.fromEntries(formData);
-
-    console.log(formProps);
-    const newList=filterList(currentList, formProps.resto)
-
-    console.log(newList);
-    console.table(newList)
-  })
   
   
   generateListButton.addEventListener('click',(event)=>{

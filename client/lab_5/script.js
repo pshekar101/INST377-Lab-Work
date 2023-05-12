@@ -20,7 +20,8 @@ async function mainEvent() { // the async keyword means we can make API requests
   mainForm.addEventListener('submit', async (submitEvent) => { // async has to be declared on every function that needs to "await" something
     submitEvent.preventDefault(); 
     console.log('form submission'); 
-    const results = await fetch('https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json');
+    //const results = await fetch('https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json');
+    const results = await fetch('https://api.tvmaze.com/shows#9ZR2v5r0oEoXqWubVRNcX91IjkO987Fg');
     currentList=await results.json();
     console.table(currentList)
     });
